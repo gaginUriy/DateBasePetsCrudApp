@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:latest
@@ -9,20 +7,21 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: pets_db
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql
     ports:
       - "5432:5432"
     networks:
       - pets-network
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
 
   backend:
     build:
-      context: https://github.com/gaginUriy/DateBasePetsCrudApp.git
+      context: .
       dockerfile: Dockerfile
     container_name: pets_backend
     environment:
@@ -30,12 +29,13 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
-      - "8080:8080"
+      - "8081:8080"
     depends_on:
       db:
         condition: service_healthy
     networks:
       - pets-network
+    restart: unless-stopped
 
 volumes:
   db-data:
