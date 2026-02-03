@@ -22,12 +22,12 @@ public class PetsDAO {
 
 
     public void postPets(Pets pet) {
-                jdbcTemplate.update("insert into Pets (type, name, vaccination,vaccination_end, color) VALUES (?,?,?,?,?)",
+                jdbcTemplate.update("insert into pets (type, name, vaccination,vaccination_end, color) VALUES (?,?,?,?,?)",
            pet.getType().name(),pet.getName(),pet.getVaccination(),pet.getEndVaccination(),pet.getColor().name());
     }
 
     public Pets getPets(int id) {
-        return jdbcTemplate.query("SELECT * FROM Pets WHERE id = ?",new Object[]{id},new BeanPropertyRowMapper<>(Pets.class))
+        return jdbcTemplate.query("SELECT * FROM pets WHERE id = ?",new Object[]{id},new BeanPropertyRowMapper<>(Pets.class))
                 .stream().findAny().orElse(null);
     }
 
@@ -36,7 +36,7 @@ public class PetsDAO {
     }
 
     public Pets updatePetsId(Pets pet, int id) {
-        jdbcTemplate.update("UPDATE Pets SET type=?, name=?, vaccination=?,vaccination_end =?, color=? WHERE id=?",
+        jdbcTemplate.update("UPDATE pets SET type=?, name=?, vaccination=?,vaccination_end =?, color=? WHERE id=?",
                 pet.getType().name(),pet.getName(),pet.getVaccination(), pet.getEndVaccination() ,pet.getColor().name(),id);
         return pet;
     }
