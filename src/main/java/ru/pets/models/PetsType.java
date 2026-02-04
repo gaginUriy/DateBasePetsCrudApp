@@ -1,7 +1,7 @@
 package ru.pets.models;
 
 public enum PetsType {
-    Cats,
+    Cat,
     Dog,
     Fish,
     Pig,

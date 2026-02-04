@@ -2,22 +2,31 @@ package ru.petsOwner.modelsOwnerPets;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.Date;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
+
 
 public class OwnerPets {
-    private int petsOwnerId;
+
+    private int id;
+    @NotBlank
     private String firstName;
     private String lastName;
+    @NotBlank
     private String phone;
+    @Positive
     private int petsId;
-    private Date birthDay;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate birthDay;
+
     private String telegram;
+    @Email(message = "Некорректный email")
     private String email;
 
     public OwnerPets() {}
 
-    public OwnerPets(int id, String firstName, String lastName, String phone, int petsId, Date birthDay, String telegram, String email) {
-        this.petsOwnerId = id;
+    public OwnerPets(int id, String firstName, String lastName, String phone, int petsId, LocalDate birthDay, String telegram, String email) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -27,12 +36,12 @@ public class OwnerPets {
         this.email = email;
     }
 
-    public int getPetsOwnerId() {
-        return petsOwnerId;
+    public int getId() {
+        return id;
     }
 
-    public void setPetsOwnerId(int petsOwnerId) {
-        this.petsOwnerId = petsOwnerId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -67,11 +76,11 @@ public class OwnerPets {
         this.petsId = petsId;
     }
 
-    public Date getBirthDay() {
+    public LocalDate getBirthDay() {
         return birthDay;
     }
 
-    public void setBirthDay(Date birthday) {
+    public void setBirthDay(LocalDate birthday) {
         this.birthDay = birthday;
     }
 

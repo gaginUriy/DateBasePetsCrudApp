@@ -23,7 +23,7 @@ public class VeterenaryReceptionDAO {
     }
 
     public VeterinaryReception getVeterinaryReceptionForId(int id) {
-        return    jdbcTemplate.query("SELECT * FROM veterinary_reception WHERE veterinary_reception_id = ?",
+        return    jdbcTemplate.query("SELECT * FROM veterinary_reception WHERE id = ?",
                 new Object[]{id}, new BeanPropertyRowMapper<>(VeterinaryReception.class)).stream().findAny().orElse(null) ;
     }
 
@@ -33,13 +33,13 @@ public class VeterenaryReceptionDAO {
 
 
     public void updateVeterenaryReception(VeterinaryReception veterinaryReception, int id) {
-        jdbcTemplate.update("UPDATE veterinary_reception SET veterinary_id=?, start_of_reception=?, end_of_reception=?, reason_for_request=? WHERE veterinary_reception_id =?"
+        jdbcTemplate.update("UPDATE veterinary_reception SET veterinary_id=?, start_of_reception=?, end_of_reception=?, reason_for_request=? WHERE id =?"
         ,veterinaryReception.getVeterinaryId(),veterinaryReception.getStartOfReception(),veterinaryReception.getEndOfReception(),
                 veterinaryReception.getReasonForRequest(),id);
     }
 
 
     public void deleteVeterenaryReception(int id) {
-        jdbcTemplate.update("DELETE FROM veterinary_reception WHERE veterinary_reception_id =? ",id);
+        jdbcTemplate.update("DELETE FROM veterinary_reception WHERE d =? ",id);
     }
 }

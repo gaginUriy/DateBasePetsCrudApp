@@ -23,12 +23,10 @@ public class PetControllers {
 
     @PostMapping(consumes = "application/json")
     public Pets AddPets(@RequestBody Pets pet){
-        System.out.println("Post Method");
-        petsDAO.postPets(pet);
 
-        return pet;
-
-
+           System.out.println("Post Method");
+           petsDAO.postPets(pet);
+           return pet;
     }
 
     @GetMapping("/{id}")

@@ -18,11 +18,11 @@ public class ReceptionDAO {
 
     public void createReception(Reception reception) {
         jdbcTemplate.update("INSERT INTO reception (veterinary_reception_id, pets_owner_id, pets_id,vaccination)VALUES(?,?,?,?)",
-               reception.getVeterinaryReceptionId(),reception.getPetsOwnerId(),reception.getPitsId(),reception.isVaccination() );
+               reception.getVeterinaryReceptionId(),reception.getPetsOwnerId(),reception.getPetsId(),reception.isVaccination() );
     }
 
     public Reception getReception(int id) {
-        return jdbcTemplate.query("SELECT * FROM reception WHERE reception_id = ?",
+        return jdbcTemplate.query("SELECT * FROM reception WHERE id = ?",
                 new Object[]{id},new BeanPropertyRowMapper<>(Reception.class)).stream().findAny().orElse(null);
     }
 
@@ -32,11 +32,11 @@ public class ReceptionDAO {
 
 
     public void updedeReception(Reception reception, int id) {
-        jdbcTemplate.update("UPDATE reception SET veterinary_reception_id=?, pets_owner_id=?, pets_id=?,vaccination=? WHERE reception_id =?",
-                reception.getVeterinaryReceptionId(),reception.getPetsOwnerId(),reception.getPitsId(),reception.isVaccination(), id);
+        jdbcTemplate.update("UPDATE reception SET veterinary_reception_id=?, pets_owner_id=?, pets_id=?,vaccination=? WHERE id =?",
+                reception.getVeterinaryReceptionId(),reception.getPetsOwnerId(),reception.getPetsId(),reception.isVaccination(), id);
     }
 
     public void deleteReception(int id) {
-        jdbcTemplate.update("DELETE FROM reception WHERE reception_id =?", id);
+        jdbcTemplate.update("DELETE FROM reception WHERE id =?", id);
     }
 }

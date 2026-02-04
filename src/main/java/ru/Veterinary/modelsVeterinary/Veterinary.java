@@ -2,21 +2,27 @@ package ru.Veterinary.modelsVeterinary;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.Date;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
 
 public class Veterinary {
-    private int veterinaryId;
+    @Null
+    private int Id;
+    @NotEmpty
     private String lastName;
+    @NotEmpty
     private String firstName;
+    @NotEmpty
     private String phone;
+    @NotEmpty
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date birthday;
+    private LocalDate birthday;
 
     public Veterinary() {
     }
 
-    public Veterinary(int Id, String lastName, String firstName, String phone, Date birthday) {
-        this.veterinaryId = Id;
+    public Veterinary(int Id, String lastName, String firstName, String phone, LocalDate birthday) {
+        this.Id = Id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.phone = phone;
@@ -25,12 +31,12 @@ public class Veterinary {
 
 
 
-    public int getVeterinaryId() {
-        return veterinaryId;
+    public int getId() {
+        return Id;
     }
 
-    public void setVeterinaryId(int veterinaryId) {
-        this.veterinaryId = veterinaryId;
+    public void setId(int id) {
+        this.Id = id;
     }
 
     public String getLastName() {
@@ -57,11 +63,11 @@ public class Veterinary {
         this.phone = phone;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 }

@@ -1,28 +1,36 @@
 package ru.reception.modelsReception;
 
+import javax.validation.constraints.*;
+
 public class Reception {
-    private int receptionId;
+    private int id;
+    @NotNull
+    @Positive
     private int veterinaryReceptionId;
+    @NotNull
+    @Positive
     private int petsOwnerId;
-    private int pitsId;
+    @NotNull
+    @Positive
+    private int petsId;
     private boolean vaccination;
 
     public Reception(){}
 
-    public Reception(int receptionId, int veterinaryReceptionId, int petsOwnerId, int pitsId, boolean vaccination) {
-        this.receptionId = receptionId;
+    public Reception(int id, int veterinaryReceptionId, int petsOwnerId, int petsId, boolean vaccination) {
+        this.id = id;
         this.veterinaryReceptionId = veterinaryReceptionId;
         this.petsOwnerId = petsOwnerId;
-        this.pitsId = pitsId;
+        this.petsId = petsId;
         this.vaccination = vaccination;
     }
 
-    public int getReceptionId() {
-        return receptionId;
+    public int getId() {
+        return id;
     }
 
-    public void setReceptionId(int receptionId) {
-        this.receptionId = receptionId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getVeterinaryReceptionId() {
@@ -41,12 +49,12 @@ public class Reception {
         this.petsOwnerId = petsOwnerId;
     }
 
-    public int getPitsId() {
-        return pitsId;
+    public int getPetsId() {
+        return petsId;
     }
 
-    public void setPitsId(int pitsId) {
-        this.pitsId = pitsId;
+    public void setPetsId(int petsId) {
+        this.petsId = petsId;
     }
 
     public boolean isVaccination() {

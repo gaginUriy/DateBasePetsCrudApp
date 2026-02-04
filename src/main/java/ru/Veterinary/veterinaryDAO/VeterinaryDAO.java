@@ -23,7 +23,7 @@ public class VeterinaryDAO {
     }
 
     public Veterinary getVeterinaryId(int id) {
-       return jdbcTemplate.query("SELECT * FROM veterinary WHERE veterinary_id = ?",new Object[]{id}, new BeanPropertyRowMapper<>(Veterinary.class))
+       return jdbcTemplate.query("SELECT * FROM veterinary WHERE id = ?",new Object[]{id}, new BeanPropertyRowMapper<>(Veterinary.class))
                .stream().findAny().orElse(null);
     }
 
@@ -32,12 +32,12 @@ public class VeterinaryDAO {
     }
 
     public void updateVeterinary(Veterinary veterinary, int id) {
-        jdbcTemplate.update("UPDATE veterinary SET first_name = ?, last_name = ?,phone = ?,birthday = ? WHERE veterinary_id = ?",
+        jdbcTemplate.update("UPDATE veterinary SET first_name = ?, last_name = ?,phone = ?,birthday = ? WHERE id = ?",
                 veterinary.getFirstName(), veterinary.getLastName(),veterinary.getPhone(),veterinary.getBirthday(),id);
 
     }
 
     public void deleteVeterinary(int id) {
-        jdbcTemplate.update("DELETE FROM veterinary WHERE veterinary_id = ?",id);
+        jdbcTemplate.update("DELETE FROM veterinary WHERE id = ?",id);
     }
 }

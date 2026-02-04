@@ -2,13 +2,19 @@ package ru.VeterinaryPriem.modelsVeterinaryPriem;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+
+import javax.validation.constraints.*;
 import java.util.Date;
 
 public class VeterinaryReception {
-    private int veterinaryReceptionId;
+    @Null
+    private int id;
+    @NotNull
     private int veterinaryId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotEmpty
     private Date startOfReception;
+    @NotEmpty
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date endOfReception;
     private String reasonForRequest;
@@ -16,19 +22,19 @@ public class VeterinaryReception {
     public VeterinaryReception(){}
 
     public VeterinaryReception(int id, int veterinaryId, Date startOfReception, Date endOfReception, String reasonForTheRequest) {
-        this.veterinaryReceptionId = id;
+        this.id = id;
         this.veterinaryId = veterinaryId;
         this.startOfReception = startOfReception;
         this.endOfReception = endOfReception;
         this.reasonForRequest = reasonForTheRequest;
     }
 
-    public int getVeterinaryReceptionId() {
-        return veterinaryReceptionId;
+    public int getId() {
+        return id;
     }
 
-    public void setVeterinaryReceptionId(int veterinaryReceptionId) {
-        this.veterinaryReceptionId = veterinaryReceptionId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getVeterinaryId() {

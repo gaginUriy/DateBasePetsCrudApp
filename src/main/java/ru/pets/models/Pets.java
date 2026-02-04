@@ -3,29 +3,33 @@ package ru.pets.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.datetime.joda.LocalDateParser;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 
 public class Pets {
+    @Null
     private int id;
+    @NotBlank(message = "No type")
     private  PetsType type;
+    @NotBlank
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date vaccination;
+    private LocalDate vaccination;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date endVaccination = vaccination;
+    private LocalDate endVaccination ;
     private PetsColor color;
 
 
 
-    public Pets(int id, Date endVaccination, Date vaccination) {
+    public Pets(int id, LocalDate endVaccination, LocalDate vaccination) {
         this.id = id;
         this.endVaccination = endVaccination;
         this.vaccination = vaccination;
     }
 
-    public Pets(int id, PetsType type, String name,Date endVaccination, Date vaccination, PetsColor color) {
+    public Pets(int id, PetsType type, String name,LocalDate endVaccination, LocalDate vaccination, PetsColor color) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -34,19 +38,19 @@ public class Pets {
         this.color = color;
     }
 
-    public Date getVaccination() {
+    public LocalDate getVaccination() {
         return vaccination;
     }
 
-    public void setVaccination(Date vaccination) {
+    public void setVaccination(LocalDate vaccination) {
         this.vaccination = vaccination;
     }
 
-    public Date getEndVaccination() {
+    public LocalDate getEndVaccination() {
         return endVaccination;
     }
 
-    public void setEndVaccination(Date endVaccination) {
+    public void setEndVaccination(LocalDate endVaccination) {
         this.endVaccination = endVaccination;
     }
 

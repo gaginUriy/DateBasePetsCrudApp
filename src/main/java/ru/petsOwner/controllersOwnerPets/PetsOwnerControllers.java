@@ -1,10 +1,15 @@
 package ru.petsOwner.controllersOwnerPets;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.petsOwner.PetsOwnerExeption.GetOwnerPetsExeption;
+import ru.petsOwner.PetsOwnerExeption.NoOwnerPetsExeption;
 import ru.petsOwner.modelsOwnerPets.OwnerPets;
 import ru.petsOwner.ownerPetsDAO.PetsOwnerDAO;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -14,23 +19,29 @@ public class PetsOwnerControllers {
 
    private final PetsOwnerDAO petsOwnerDAO ;
 
+
    @Autowired
     public PetsOwnerControllers(PetsOwnerDAO petsOwnerDAO) {
         this.petsOwnerDAO = petsOwnerDAO;
-    }
+   }
 
     @PostMapping(consumes = "application/json")
-    public int postPetsOwner(@RequestBody OwnerPets ownerPets){
+    public ResponseEntity<OwnerPets> postPetsOwner(@RequestBody OwnerPets ownerPets){
         System.out.println("Post Method / petsOwner");
-       return petsOwnerDAO.createPetsOwner(ownerPets);
-
+        OwnerPets saveOwnerPets= petsOwnerDAO.createPetsOwner(ownerPets);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saveOwnerPets);
     }
 
     @GetMapping("/{id}")
         public OwnerPets getPetsOwner (@PathVariable("id")int id){
 
         System.out.println("getid  Method / petsOwner");
-     return petsOwnerDAO.getPetsOwnerFofId(id);
+     OwnerPets ownerPets = petsOwnerDAO.getPetsOwnerFofId(id);
+     if (ownerPets == null){
+
+         throw new NoOwnerPetsExeption("No for owner pets in id = "+id);
+     }
+     return ownerPets;
     }
 
     @GetMapping
@@ -40,12 +51,22 @@ public class PetsOwnerControllers {
     }
 
     @PutMapping("/{id}")
-    public void updatePetsOwner( @RequestBody OwnerPets ownerPets, @PathVariable("id")int id){
-         petsOwnerDAO.updatePetsOwner(ownerPets, id);
+    public void updatePetsOwner(@Valid @RequestBody OwnerPets ownerPets , @PathVariable("id")int id){
+        OwnerPets petOwner = petsOwnerDAO.getPetsOwnerFofId(id);
+        if (petOwner == null){
+
+            throw new NoOwnerPetsExeption("No for owner pets in id = "+id);
+        }
+        else {
+            petsOwnerDAO.updatePetsOwner(ownerPets, id);
+        }
+
     }
     @DeleteMapping("/{id}")
     public OwnerPets deletePetsOwner(@PathVariable("id")int id){
 
         return petsOwnerDAO.deletePetsOwner(id);
+
+
     }
 }
