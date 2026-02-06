@@ -3,6 +3,7 @@ package ru.Veterinary.controllersVeterinary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.Veterinary.modelsVeterinary.Veterinary;
+import ru.Veterinary.services.VeterinariService;
 import ru.Veterinary.veterinaryDAO.VeterinaryDAO;
 
 import java.util.List;
@@ -11,39 +12,38 @@ import java.util.List;
 @RequestMapping("/veterinary")
 public class VeterinaryControllers {
 
-    VeterinaryDAO veterinaryDAO;
-@Autowired
-    public VeterinaryControllers(VeterinaryDAO veterinaryDAO) {
-        this.veterinaryDAO = veterinaryDAO;
-    }
+    @Autowired
+    private VeterinariService veterinariService; // убрал final!
+
+
     @PostMapping
     public void createVeterinary(@RequestBody Veterinary veterinary){
         System.out.println("Post Method createVeterinary");
-        veterinaryDAO.createVeterinary(veterinary);
+        veterinariService.createVeterinary(veterinary);
     }
 
     @GetMapping("/{id}")
     public Veterinary getVeterinaryId(@PathVariable("id")int id){
         System.out.println("get Method getVeterinaryId");
-        return veterinaryDAO.getVeterinaryId(id);
+        return veterinariService.findoneVeterinary(id);
     }
 
     @GetMapping
     public List<Veterinary> getAllVeterinary(){
         System.out.println("getALL Method getVeterinary");
-        return veterinaryDAO.getAllVeterinary();
+        return veterinariService.findAllVeterinary();
     }
 
     @PutMapping("/{id}")
     public void updateVeterinary(@RequestBody Veterinary veterinary,@PathVariable("id")int id){
         System.out.println("put Method updateVeterinary");
-        veterinaryDAO.updateVeterinary(veterinary, id);
+        veterinariService.updateVeterinary( id, veterinary);
 
     }
 
     @DeleteMapping("/{id}")
     public void deleteVeterinary(@PathVariable("id")int id){
-        veterinaryDAO.deleteVeterinary(id);
+        veterinariService.deleteVeterinary(id);
         System.out.println("delete Method deleteVeterinary");
 
 

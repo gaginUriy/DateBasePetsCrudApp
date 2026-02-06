@@ -51,22 +51,20 @@ public class PetsOwnerControllers {
     }
 
     @PutMapping("/{id}")
-    public void updatePetsOwner(@Valid @RequestBody OwnerPets ownerPets , @PathVariable("id")int id){
+    public OwnerPets updatePetsOwner(@Valid @RequestBody OwnerPets ownerPets , @PathVariable("id")int id){
         OwnerPets petOwner = petsOwnerDAO.getPetsOwnerFofId(id);
         if (petOwner == null){
 
             throw new NoOwnerPetsExeption("No for owner pets in id = "+id);
         }
         else {
-            petsOwnerDAO.updatePetsOwner(ownerPets, id);
+           return petsOwnerDAO.updatePetsOwner(ownerPets, id);
         }
-
     }
+
+
     @DeleteMapping("/{id}")
-    public OwnerPets deletePetsOwner(@PathVariable("id")int id){
-
-        return petsOwnerDAO.deletePetsOwner(id);
-
-
+    public void deletePetsOwner(@PathVariable("id")int id){
+         petsOwnerDAO.deletePetsOwner(id);
     }
 }

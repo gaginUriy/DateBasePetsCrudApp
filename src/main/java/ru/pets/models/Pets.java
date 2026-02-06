@@ -1,36 +1,45 @@
 package ru.pets.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.datetime.joda.LocalDateParser;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Locale;
 
+
+@Entity
+@Table(name = "pets")
 public class Pets {
-    @Null
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotBlank(message = "No type")
+
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private  PetsType type;
-    @NotBlank
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "vaccination")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate vaccination;
+
+    @Column(name = "vaccination_end")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endVaccination ;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "color")
     private PetsColor color;
 
 
 
-    public Pets(int id, LocalDate endVaccination, LocalDate vaccination) {
-        this.id = id;
-        this.endVaccination = endVaccination;
-        this.vaccination = vaccination;
-    }
+    public Pets(){}
 
-    public Pets(int id, PetsType type, String name,LocalDate endVaccination, LocalDate vaccination, PetsColor color) {
-        this.id = id;
+    public Pets(PetsType type, String name,LocalDate endVaccination, LocalDate vaccination, PetsColor color) {
         this.type = type;
         this.name = name;
         this.vaccination = vaccination;
@@ -54,7 +63,7 @@ public class Pets {
         this.endVaccination = endVaccination;
     }
 
-    public Pets(){}
+
 
     public int getId() {
         return id;

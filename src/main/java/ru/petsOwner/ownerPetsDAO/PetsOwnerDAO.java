@@ -1,8 +1,11 @@
 package ru.petsOwner.ownerPetsDAO;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.petsOwner.modelsOwnerPets.OwnerPets;
 
 import java.util.List;
@@ -12,45 +15,55 @@ import java.util.Map;
 
 public class PetsOwnerDAO {
 
-    private final JdbcTemplate jdbcTemplate;
 
+    private final SessionFactory sessionFactory;
 
-    public PetsOwnerDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-
+    public PetsOwnerDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    @Transactional
     public OwnerPets  createPetsOwner(OwnerPets ownerPets) {
-
-     jdbcTemplate.update("INSERT INTO pets_owner (first_name, last_name,phone, pets_id, birthday, telegram, email) VALUES (?,?,?,?,?,?,?)",
-                 ownerPets.getFirstName(), ownerPets.getLastName(), ownerPets.getPhone(), ownerPets.getPetsId(),
-                ownerPets.getBirthDay(), ownerPets.getTelegram(), ownerPets.getEmail());
+        Session session = sessionFactory.getCurrentSession();
+        session.save(ownerPets);
         return ownerPets;
     }
 
+    @Transactional(readOnly = true)
     public OwnerPets getPetsOwnerFofId(int id) {
-        return jdbcTemplate.query("SELECT * FROM pets_owner WHERE id = ?",new Object[]{id}, new BeanPropertyRowMapper<>(OwnerPets.class))
-                .stream().findAny().orElse(null);
-
-
-
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(OwnerPets.class, id);
     }
 
+    @Transactional(readOnly = true)
     public List<OwnerPets> getAllPetsOwner() {
-        return jdbcTemplate.query("SELECT * FROM pets_owner", new BeanPropertyRowMapper<>(OwnerPets.class));
+
+        Session session = sessionFactory.getCurrentSession();
+        List<OwnerPets> ownerPets= session.createQuery("SELECT p from OwnerPets p", OwnerPets.class).getResultList();
+        return ownerPets;
     }
 
-    public void updatePetsOwner(OwnerPets ownerPets, int id) {
+    @Transactional
+    public OwnerPets updatePetsOwner(OwnerPets ownerPets, int id) {
+        Session session = sessionFactory.getCurrentSession();
+        OwnerPets ownerPetsUpdate = session.get(OwnerPets.class, id);
 
-      jdbcTemplate.update("UPDATE pets_owner SET first_name = ?, last_name = ?,phone = ?, pets_id = ?, birthday = ?, telegram = ?, email = ? WHERE id = ?",
-                ownerPets.getFirstName(), ownerPets.getLastName(), ownerPets.getPhone(), ownerPets.getPetsId(),
-                ownerPets.getBirthDay(), ownerPets.getTelegram(), ownerPets.getEmail(), id);
+        ownerPetsUpdate.setFirstName(ownerPets.getFirstName());
+        ownerPetsUpdate.setLastName(ownerPets.getLastName());
+        ownerPetsUpdate.setPhone(ownerPets.getPhone());
+        ownerPetsUpdate.setPetsId(ownerPets.getPetsId());
+        ownerPetsUpdate.setBirthDay(ownerPets.getBirthDay());
+        ownerPetsUpdate.setTelegram(ownerPets.getTelegram());
+        ownerPetsUpdate.setEmail(ownerPets.getEmail());
+
+        return ownerPets;
 
 
     }
 
-    public OwnerPets deletePetsOwner(int id) {
-        jdbcTemplate.update("DELETE FROM pets_owner WHERE id = ?",id);
-        return null;
+    @Transactional
+    public void deletePetsOwner(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(session.get(OwnerPets.class,id));
     }
 }

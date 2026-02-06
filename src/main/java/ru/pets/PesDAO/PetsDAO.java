@@ -1,49 +1,65 @@
 package ru.pets.PesDAO;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.pets.models.Pets;
+import ru.petsOwner.modelsOwnerPets.OwnerPets;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class PetsDAO {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final SessionFactory sessionFactory ;
 
     @Autowired
-    public PetsDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public PetsDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    @Transactional
+    public Pets postPets(Pets pet) {
 
-
-    public void postPets(Pets pet) {
-                jdbcTemplate.update("insert into pets (type, name, vaccination,vaccination_end, color) VALUES (?,?,?,?,?)",
-           pet.getType().name(),pet.getName(),pet.getVaccination(),pet.getEndVaccination(),pet.getColor().name());
-    }
-
-    public Pets getPets(int id) {
-        return jdbcTemplate.query("SELECT * FROM pets WHERE id = ?",new Object[]{id},new BeanPropertyRowMapper<>(Pets.class))
-                .stream().findAny().orElse(null);
-    }
-
-    public List<Pets> getAllPets() {
-        return jdbcTemplate.query("SELECT * FROM Pets",new BeanPropertyRowMapper<>(Pets.class));
-    }
-
-    public Pets updatePetsId(Pets pet, int id) {
-        jdbcTemplate.update("UPDATE pets SET type=?, name=?, vaccination=?,vaccination_end =?, color=? WHERE id=?",
-                pet.getType().name(),pet.getName(),pet.getVaccination(), pet.getEndVaccination() ,pet.getColor().name(),id);
+        Session session= sessionFactory.getCurrentSession();
+        session.save(pet);
         return pet;
     }
 
-    public int DeletePets(int id) {
-            int ids = id;
-       jdbcTemplate.update("delete from Pets where id=?",id);
-        return ids;
+    @Transactional(readOnly = true)
+    public Pets getPets(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Pets.class, id);
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<Pets> getAllPets() {
+        Session session = sessionFactory.getCurrentSession();
+        List<Pets> pets= session.createQuery("SELECT p from Pets p", Pets.class).getResultList();
+        return pets;
+    }
+
+    @Transactional
+    public Pets updatePetsId(Pets pet, int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Pets petUpdate = session.get(Pets.class, id);
+
+        petUpdate.setType(pet.getType());
+        petUpdate.setName(pet.getName());
+        petUpdate.setVaccination(pet.getVaccination());
+        petUpdate.setEndVaccination(pet.getEndVaccination());
+        petUpdate.setColor(pet.getColor());
+        return pet;
+    }
+
+    @Transactional
+    public void DeletePets(int id) {
+            Session session = sessionFactory.getCurrentSession();
+            session.delete(session.get(Pets.class,id));
     }
 }

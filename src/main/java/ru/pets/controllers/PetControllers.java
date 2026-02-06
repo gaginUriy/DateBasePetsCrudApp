@@ -23,10 +23,8 @@ public class PetControllers {
 
     @PostMapping(consumes = "application/json")
     public Pets AddPets(@RequestBody Pets pet){
-
-           System.out.println("Post Method");
-           petsDAO.postPets(pet);
-           return pet;
+        System.out.println("Post Method");
+        return  petsDAO.postPets(pet);
     }
 
     @GetMapping("/{id}")
@@ -46,8 +44,8 @@ public class PetControllers {
     }
 
     @DeleteMapping("/{id}")
-    public int Delete(@PathVariable("id")int id){
-        return petsDAO.DeletePets(id);
+    public void Delete(@PathVariable("id")int id){
+        petsDAO.DeletePets(id);
     }
 
 }

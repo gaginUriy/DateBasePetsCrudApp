@@ -1,32 +1,48 @@
 package ru.petsOwner.modelsOwnerPets;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 
+@Entity
+@Table(name = "pets_owner")
 public class OwnerPets {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotBlank
+
+    @Column(name ="first_name" )
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
     @NotBlank
+    @Column(name = "phone")
     private String phone;
-    @Positive
+
+    @Column(name = "pets_id")
+  @Positive
     private int petsId;
+
+    @Column(name = "birthday")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthDay;
 
+    @Column(name = "telegram")
     private String telegram;
+
+    @Column(name = "email")
     @Email(message = "Некорректный email")
     private String email;
 
     public OwnerPets() {}
 
-    public OwnerPets(int id, String firstName, String lastName, String phone, int petsId, LocalDate birthDay, String telegram, String email) {
-        this.id = id;
+    public OwnerPets( String firstName, String lastName, String phone, int petsId, LocalDate birthDay, String telegram, String email) {
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
