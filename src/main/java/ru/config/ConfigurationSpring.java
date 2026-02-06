@@ -28,7 +28,7 @@ import java.util.Properties;
 @ComponentScan("ru")
 @PropertySource("classpath:hibernate.properties")
 @EnableTransactionManagement
-@EnableJpaRepositories("ru")
+@EnableJpaRepositories("ru.repositories")
 @EnableWebMvc
 public class ConfigurationSpring implements WebMvcConfigurer {
 private final Environment env;
@@ -70,33 +70,11 @@ private final Environment env;
             return properties;
         }
 
-//        @Bean
-//        public LocalSessionFactoryBean sessionFactory() {
-//            LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//            sessionFactory.setDataSource(dataSource());
-//            sessionFactory.setPackagesToScan("ru");
-//            sessionFactory.setHibernateProperties(hibernateProperties());
-//
-//            return sessionFactory;
-//        }
-//
-//
-//
-//    @Bean
-//    public PlatformTransactionManager hibernateTransactionManager() {
-//        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-//        transactionManager.setSessionFactory(sessionFactory().getObject());
-//
-//        return transactionManager;
-//    }
-
-
-
     @Bean
-    public LocalContainerEntityManagerFactoryBean sessionFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("ru");
+        em.setPackagesToScan("ru.models");
 
         final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
@@ -108,7 +86,7 @@ private final Environment env;
         @Bean
         public PlatformTransactionManager transactionManager() {
             JpaTransactionManager transactionManager =new JpaTransactionManager();
-            transactionManager.setEntityManagerFactory(sessionFactory().getObject()); // Исправлено
+            transactionManager.setEntityManagerFactory(entityManagerFactory().getObject()); // Исправлено
 
 
             return transactionManager;
