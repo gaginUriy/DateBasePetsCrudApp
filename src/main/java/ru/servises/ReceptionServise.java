@@ -20,7 +20,7 @@ public class ReceptionServise {
         this.receptionRepository = receptionRepository;
     }
 
-
+    @Transactional
     public Reception createReception(Reception reception) {
         receptionRepository.save(reception);
         return reception;
@@ -34,13 +34,13 @@ public class ReceptionServise {
     public List<Reception> getAllReception() {
        return receptionRepository.findAll();
     }
-
+    @Transactional
     public Reception updedeReception(Reception reception, int id) {
         reception.setId(id);
         receptionRepository.save(reception);
         return reception;
     }
-
+    @Transactional
     public void receptionServise(int id) {
         receptionRepository.deleteById(id);
 

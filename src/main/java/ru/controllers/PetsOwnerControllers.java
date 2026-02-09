@@ -41,6 +41,14 @@ private final PetsOwnerServise petsOwnerServise;
         return petsOwnerServise.getAllOwnerPets();
     }
 
+
+    @PutMapping("/{id}")
+    public OwnerPets updteOwnerPets(@PathVariable("id") int id,@RequestBody OwnerPets ownerPets){
+        return petsOwnerServise.updatePetsOwner(id, ownerPets);
+
+    }
+
+
     @DeleteMapping("/{id}")
     public void deleteOwnerPets(@PathVariable("id") int id){
         petsOwnerServise.deleteOwnerPet(id);

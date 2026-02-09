@@ -18,7 +18,7 @@ public class PetsOwnerServise {
         this.petsOwnerRepository = ownerRepository;
     }
 
-
+    @Transactional
     public OwnerPets saveOwnerPets(OwnerPets ownerPets) {
 
          return petsOwnerRepository.save(ownerPets);
@@ -32,8 +32,14 @@ public class PetsOwnerServise {
     public List<OwnerPets> getAllOwnerPets() {
        return petsOwnerRepository.findAll();
     }
-
+    @Transactional
     public void deleteOwnerPet(int id) {
         petsOwnerRepository.deleteById(id);
+    }
+
+    @Transactional
+    public OwnerPets updatePetsOwner(int id, OwnerPets ownerPets) {
+        ownerPets.setPetsId(id);
+        return petsOwnerRepository.save(ownerPets);
     }
 }

@@ -34,12 +34,12 @@ public class VeterinaryReceptionServise {
     public List<VeterinaryReception> getAllVeterenaryReception() {
         return veterinaryReceptionRepository.findAll();
     }
-
+    @Transactional
     public VeterinaryReception updateVeterenaryReception(VeterinaryReception veterinaryReception, int id) {
         veterinaryReception.setId(id);
         return veterinaryReceptionRepository.save(veterinaryReception);
     }
-
+    @Transactional
     public void deleteVeterenaryReception(int id) {
         veterinaryReceptionRepository.deleteById(id);
     }

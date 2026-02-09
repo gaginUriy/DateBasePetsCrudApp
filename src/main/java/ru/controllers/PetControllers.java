@@ -1,8 +1,13 @@
 package ru.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.models.Pets;
 import ru.servises.PetServise;
+import ru.util.ErrorResponse;
+import ru.util.PetNotFoundExeption;
+
 import java.util.List;
 
 @RestController
@@ -44,6 +49,15 @@ private final PetServise petServise;
     @DeleteMapping("/{id}")
     public void Delete(@PathVariable("id")int id){
         petServise.DeletePets(id);
+    }
+
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> petNotFound(PetNotFoundExeption e){
+        ErrorResponse responce = new ErrorResponse(
+                "Not found pet id", System.currentTimeMillis()
+        );
+        return new ResponseEntity<>(responce, HttpStatus.NOT_FOUND);
     }
 
 }
