@@ -1,11 +1,9 @@
 package ru.servises;
 
-import org.springframework.scheduling.support.PeriodicTrigger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.models.Pets;
 import ru.repositories.PetRepository;
-import ru.util.PetNotFoundExeption;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +28,7 @@ public class PetServise {
 
     public Pets getPets(int id) {
        Optional<Pets> getPets= petRepository.findById(id);
-       return getPets.orElseThrow(PetNotFoundExeption::new);
+       return getPets.orElse(null);
     }
 
     public List<Pets> getAllPets() {

@@ -1,13 +1,14 @@
 package ru.controllers;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.models.Pets;
 import ru.servises.PetServise;
-import ru.util.ErrorResponse;
-import ru.util.PetNotFoundExeption;
+import ru.util.ExceptionMethods;
+import ru.util.NotIdException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,23 +17,32 @@ public class PetControllers {
 
     //<editor-fold desc="конструктор">
 private final PetServise petServise;
+private final ExceptionMethods exceptionMethods;
 
-    public PetControllers(PetServise petServise) {
+    public PetControllers(PetServise petServise, ExceptionMethods exceptionMethods) {
         this.petServise = petServise;
+        this.exceptionMethods = exceptionMethods;
     }
 
     //</editor-fold>
 
 
     @PostMapping(consumes = "application/json")
-    public Pets AddPets(@RequestBody Pets pet){
+    public ResponseEntity<Pets> AddPets(@RequestBody @Valid Pets pet,  BindingResult bindingResult){
+
         System.out.println("Post Method");
-        return  petServise.postPets(pet);
+        exceptionMethods.validationModelField(bindingResult);
+         petServise.postPets(pet);
+
+        return ResponseEntity.ok(pet);
     }
 
     @GetMapping("/{id}")
-    public Pets GetPets(@PathVariable("id")int id){
-        return petServise.getPets(id);
+    public ResponseEntity<Pets> GetPets(@PathVariable("id") int id){
+       Pets pet= petServise.getPets(id);
+       exceptionMethods.validationId(pet, id);
+
+       return ResponseEntity.ok(pet);
     }
 
     @GetMapping()
@@ -41,23 +51,17 @@ private final PetServise petServise;
     }
 
     @PutMapping("/{id}")
-    public Pets UpdatePets(@RequestBody Pets pet, @PathVariable("id")int id){
-        return petServise.updatePetsId(pet,id);
+    public ResponseEntity<Pets> UpdatePets(@RequestBody @Valid Pets pet , BindingResult bindingResult, @PathVariable("id")int id){
+        exceptionMethods.validationModelField(bindingResult);
+        petServise.updatePetsId(pet,id);
+
+        return ResponseEntity.ok(pet);
 
     }
 
     @DeleteMapping("/{id}")
     public void Delete(@PathVariable("id")int id){
         petServise.DeletePets(id);
-    }
-
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> petNotFound(PetNotFoundExeption e){
-        ErrorResponse responce = new ErrorResponse(
-                "Not found pet id", System.currentTimeMillis()
-        );
-        return new ResponseEntity<>(responce, HttpStatus.NOT_FOUND);
     }
 
 }

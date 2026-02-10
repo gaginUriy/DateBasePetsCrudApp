@@ -3,9 +3,7 @@ package ru.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 
@@ -22,6 +20,7 @@ public class Pets {
     @Enumerated(EnumType.STRING)
     private  PetsType type;
 
+    @NotNull(message = "Name not null")
     @Column(name = "name")
     private String name;
 
@@ -33,6 +32,7 @@ public class Pets {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endVaccination ;
 
+@NotNull(message = "Collor is not null")
     @Enumerated(EnumType.STRING)
     @Column(name = "color")
     private PetsColor color;

@@ -2,9 +2,11 @@ package ru.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.models.Pets;
 import ru.models.Reception;
 
 import ru.servises.ReceptionServise;
+import ru.util.NotIdException;
 
 import java.util.List;
 
@@ -25,8 +27,14 @@ private final ReceptionServise receptionServise;
 
     @GetMapping("/{id}")
     public Reception getReception(@PathVariable("id") int id){
-    return receptionServise.getReception(id);
+        Reception get= receptionServise.getReception(id);
+        if (get == null)
+        {
+            throw new NotIdException("No id "+ id);
+        }
+        return get;
     }
+
 
     @GetMapping
     public List<Reception>getAllReception(){
