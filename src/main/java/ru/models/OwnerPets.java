@@ -4,9 +4,7 @@ package ru.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Entity
@@ -19,16 +17,21 @@ public class OwnerPets {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotEmpty(message = " не может быть пустым")
+
     @Column(name ="first_name" )
     private String firstName;
 
+    @NotEmpty(message = " не может быть пустым")
     @Column(name = "last_name")
     private String lastName;
 
+    @NotNull(message = " не может быть пустым")
     @NotBlank
     @Column(name = "phone")
     private String phone;
 
+    @NotEmpty(message = " не может быть пустым")
     @Column(name = "pets_id")
     @Positive
     private int petsId;
@@ -37,6 +40,7 @@ public class OwnerPets {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthDay;
 
+    @NotEmpty(message = " не может быть пустым")
     @Column(name = "telegram")
     private String telegram;
 

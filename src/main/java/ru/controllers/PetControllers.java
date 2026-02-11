@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.models.Pets;
 import ru.servises.PetServise;
 import ru.util.ExceptionMethods;
-import ru.util.NotIdException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -52,6 +51,7 @@ private final ExceptionMethods exceptionMethods;
 
     @PutMapping("/{id}")
     public ResponseEntity<Pets> UpdatePets(@RequestBody @Valid Pets pet , BindingResult bindingResult, @PathVariable("id")int id){
+        exceptionMethods.existByID(id);
         exceptionMethods.validationModelField(bindingResult);
         petServise.updatePetsId(pet,id);
 
@@ -61,7 +61,9 @@ private final ExceptionMethods exceptionMethods;
 
     @DeleteMapping("/{id}")
     public void Delete(@PathVariable("id")int id){
+        exceptionMethods.existByID(id);
         petServise.DeletePets(id);
+
     }
 
 }

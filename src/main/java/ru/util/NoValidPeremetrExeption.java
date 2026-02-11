@@ -8,7 +8,7 @@ public class NoValidPeremetrExeption extends RuntimeException{
 
     public NoValidPeremetrExeption(String message) {
         super(message);
-        System.out.println("NotIdException exist");
+        System.out.println("NotIdException exist1");
     }
 
 }

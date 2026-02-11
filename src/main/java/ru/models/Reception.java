@@ -16,17 +16,17 @@ public class Reception {
     private int id;
 
     @Column(name = "veterinary_reception_id")
-    @NotNull
+    @NotEmpty(message = " не может быть пустым")
     @Positive
     private int veterinaryReceptionId;
 
     @Column(name = "pets_owner_id")
-    @NotNull
+    @NotEmpty(message = " не может быть пустым")
     @Positive
     private int petsOwnerId;
 
     @Column(name = "pets_id")
-    @NotNull
+    @NotEmpty(message = " не может быть пустым")
     @Positive
     private int petsId;
 

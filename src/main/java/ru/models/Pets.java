@@ -20,7 +20,7 @@ public class Pets {
     @Enumerated(EnumType.STRING)
     private  PetsType type;
 
-    @NotNull(message = "Name not null")
+    @NotEmpty(message = " не может быть пустым")
     @Column(name = "name")
     private String name;
 
@@ -32,7 +32,7 @@ public class Pets {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endVaccination ;
 
-@NotNull(message = "Collor is not null")
+    @NotEmpty(message = " не может быть пустым")
     @Enumerated(EnumType.STRING)
     @Column(name = "color")
     private PetsColor color;

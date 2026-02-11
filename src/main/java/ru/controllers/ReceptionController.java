@@ -32,6 +32,7 @@ private final ReceptionServise receptionServise;
         {
             throw new NotIdException("No id "+ id);
         }
+
         return get;
     }
 

@@ -19,17 +19,19 @@ public class VeterinaryReception {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotEmpty(message = " не может быть пустым")
     @Column(name = "veterinary_id")
-    @NotNull
     private int veterinaryId;
 
+    @NotNull(message = " не может быть пустым")
     @Column(name = "start_of_reception")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @NotEmpty
+
+    @NotEmpty(message = " не может быть пустым")
     private Date startOfReception;
 
     @Column(name = "end_of_reception")
-    @NotEmpty
+    @NotNull(message = " не может быть пустым")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date endOfReception;
 

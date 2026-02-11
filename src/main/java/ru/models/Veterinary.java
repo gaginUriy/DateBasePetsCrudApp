@@ -15,19 +15,19 @@ public class Veterinary {
     private int Id;
 
     @Column(name = "last_name")
-    @NotEmpty
+    @NotEmpty(message = " не может быть пустым")
     private String lastName;
 
     @Column(name = "first_name")
-    @NotEmpty
+    @NotEmpty(message = " не может быть пустым")
     private String firstName;
 
     @Column(name = "phone")
-    @NotEmpty
+    @NotEmpty(message = " не может быть пустым")
     private String phone;
 
     @Column(name = "birthday")
-    @NotEmpty
+    @NotNull(message = " не может быть пустым")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 

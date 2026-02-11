@@ -32,7 +32,7 @@ public class ExceptionHandlers {
     public ResponseEntity<ClassForExcepted> handlerExeption(Exception e)
     {
         ClassForExcepted response = new ClassForExcepted(e.getMessage());
-        response.setMessage(e.getMessage());
+        response.setMessage("Нейизвестная ошибка");
         System.out.println("Exception exist");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
