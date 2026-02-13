@@ -1,5 +1,6 @@
 package ru.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -90,6 +91,12 @@ private final Environment env;
 
 
             return transactionManager;
+        }
+
+        @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+
         }
 
 

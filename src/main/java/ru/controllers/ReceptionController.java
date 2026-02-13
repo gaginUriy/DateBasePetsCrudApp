@@ -1,55 +1,98 @@
 package ru.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.DTO.PetsDTO;
+import ru.DTO.ReceptionDTO;
+import ru.DTO.ToNotificationPostDTO;
 import ru.models.Pets;
 import ru.models.Reception;
 
 import ru.servises.ReceptionServise;
-import ru.util.NotIdException;
+import ru.util.Excepion.ExceptionMethods;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/Reception")
 public class ReceptionController {
 
-private final ReceptionServise receptionServise;
+    private static final Logger log = LoggerFactory.getLogger(ReceptionController.class);
+    private final ReceptionServise receptionServise;
+    private final ExceptionMethods exceptionMethods;
+    private final ModelMapper modelMapper;
 
-    public ReceptionController(ReceptionServise receptionServise) {
+    public ReceptionController(ReceptionServise receptionServise, ExceptionMethods exceptionMethods, ModelMapper modelMapper) {
         this.receptionServise = receptionServise;
+        this.exceptionMethods = exceptionMethods;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping
-    public Reception createReception(@RequestBody Reception reception){
-       return receptionServise.createReception(reception);
+    public ResponseEntity<Reception>  createReception(@RequestBody @Valid ReceptionDTO receptionDTO, BindingResult bindingResult){
+        log.info("The POST method was called for the method:GetPets");
+        exceptionMethods.validationModelField(bindingResult);
+       Reception reception = receptionServise.createReception(convertToReception(receptionDTO) );
+       return ResponseEntity.ok(reception);
     }
 
     @GetMapping("/{id}")
-    public Reception getReception(@PathVariable("id") int id){
-        Reception get= receptionServise.getReception(id);
-        if (get == null)
-        {
-            throw new NotIdException("No id "+ id);
-        }
-
-        return get;
+    public ResponseEntity<ReceptionDTO> getReception(@PathVariable("id") int id){
+        log.info("The GET method was called for the method:GetPets");
+        ReceptionDTO get= convertToReceptionDTO( receptionServise.getReception(id));
+        exceptionMethods.validationId(get, id);
+        return ResponseEntity.ok(get);
     }
 
 
     @GetMapping
     public List<Reception>getAllReception(){
-    return receptionServise.getAllReception();
+        log.info("The GET method was called for the method:GetPets");
+        return receptionServise.getAllReception();
     }
 
     @PutMapping("/{id}")
-    public Reception updedeReception(@RequestBody Reception reception,@PathVariable("id") int id){
-      return   receptionServise.updedeReception(reception, id);
+    public ResponseEntity< Reception> updedeReception(@RequestBody @Valid ReceptionDTO receptionDTO,BindingResult bindingResult,@PathVariable("id") int id){
+        log.info("The PUT  method was called for the method:GetPets");
+        exceptionMethods.existByID(id);
+        exceptionMethods.validationModelField(bindingResult);
+        Reception reception= receptionServise.updedeReception(convertToReception(receptionDTO), id);
+
+        return ResponseEntity.ok(reception);
     }
 
     @DeleteMapping("/{id}")
     public void deleteReception(@PathVariable("id")int id){
-    receptionServise.receptionServise(id);
+        log.info("The DELETE  method was called for the method:GetPets");
+        exceptionMethods.existByID(id);
+        receptionServise.receptionServise(id);
+    }
+
+    @PostMapping("{/notification}")
+    public ResponseEntity<ToNotificationPostDTO> confirmVetAppointmentBooked(@RequestBody @Valid ToNotificationPostDTO toNotificationPostDTO, BindingResult bindingResult){
+        log.info("The POST method was called for the method:GetPets");
+        exceptionMethods.validationModelField(bindingResult);
+       return ResponseEntity.ok  (receptionServise.postNotification(toNotificationPostDTO));
+    }
+
+
+
+    private Reception convertToReception(ReceptionDTO receptionDTO ) {
+        log.info("convertToReception Return");
+        return modelMapper.map(receptionDTO, Reception.class);
 
     }
+
+    private ReceptionDTO convertToReceptionDTO(Reception reception){
+
+        log.info("Return convertToReceptionDTO");
+        return modelMapper.map(reception,ReceptionDTO.class);
+    }
+
+
 }

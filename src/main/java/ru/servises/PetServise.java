@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.models.Pets;
 import ru.repositories.PetRepository;
-import ru.util.ExceptionMethods;
-import ru.util.NotIdException;
 
 import java.util.List;
 import java.util.Optional;

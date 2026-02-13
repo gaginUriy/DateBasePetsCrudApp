@@ -1,57 +1,24 @@
-package ru.models;
+package ru.DTO;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
-
-@Entity
-@Table(name = "reception")
-
-public class Reception {
-
-
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(name = "veterinary_reception_id")
+public class ReceptionDTO {
     @NotNull(message = " не может быть пустым")
     @Positive
     private int veterinaryReceptionId;
 
-    @Column(name = "pets_owner_id")
     @NotNull(message = " не может быть пустым")
     @Positive
     private int petsOwnerId;
 
-    @Column(name = "pets_id")
     @NotNull(message = " не может быть пустым")
     @Positive
     private int petsId;
 
-    @Column(name = "vaccination")
     private boolean vaccination;
-
-
-
-    public Reception(){}
-
-    public Reception(int id, int veterinaryReceptionId, int petsOwnerId, int petsId, boolean vaccination) {
-        this.id = id;
-        this.veterinaryReceptionId = veterinaryReceptionId;
-        this.petsOwnerId = petsOwnerId;
-        this.petsId = petsId;
-        this.vaccination = vaccination;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getVeterinaryReceptionId() {
         return veterinaryReceptionId;

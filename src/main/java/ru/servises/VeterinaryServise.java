@@ -34,7 +34,7 @@ public class VeterinaryServise {
         return find.orElse(null);
     }
     @Transactional
-    public Veterinary updateVeterinary (int id, Veterinary veterinary){
+    public Veterinary updateVeterinary (Veterinary veterinary, int id){
        veterinary.setId(id);
       return repository.save(veterinary);
     }

@@ -1,11 +1,15 @@
 package ru.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.DTO.VeterinaryDTO;
 import ru.models.Veterinary;
 import ru.servises.VeterinaryServise;
-import ru.util.ExceptionMethods;
+import ru.util.Excepion.ExceptionMethods;
 
 
 import javax.validation.Valid;
@@ -16,54 +20,64 @@ import java.util.List;
 public class VeterinaryControllers {
 
 
-
+    private static final Logger log = LoggerFactory.getLogger(VeterinaryControllers.class);
     private final VeterinaryServise veterinaryServise;
     private final ExceptionMethods exceptionMethods;
+    private final ModelMapper modelMapper;
 
-    public VeterinaryControllers(VeterinaryServise veterinaryServise, ExceptionMethods exceptionMethods) {
+    public VeterinaryControllers(VeterinaryServise veterinaryServise, ExceptionMethods exceptionMethods, ModelMapper modelMapper) {
         this.veterinaryServise = veterinaryServise;
         this.exceptionMethods = exceptionMethods;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping
-    public void createVeterinary(@RequestBody @Valid Veterinary veterinary, BindingResult bindingResult){
-        System.out.println("Post Method createVeterinary");
+    public ResponseEntity<Veterinary> createVeterinary(@RequestBody @Valid VeterinaryDTO veterinaryDTO, BindingResult bindingResult){
+        log.info("The POST method was called for the method: createVeterinary");
+
         exceptionMethods.validationModelField(bindingResult);
-        veterinaryServise.createVeterinary(veterinary);
+        Veterinary veterinary = veterinaryServise.createVeterinary(convertToVeterinary( veterinaryDTO));
+        return ResponseEntity.ok(veterinary);
     }
 
     @GetMapping("/{id}")
-    public Veterinary getVeterinaryId(@PathVariable("id")int id){
-        System.out.println("get Method getVeterinaryId");
-        Veterinary veterinary = veterinaryServise.findoneVeterinary(id);
-        exceptionMethods.validationId(veterinary,id);
-        return veterinary;
+    public ResponseEntity< VeterinaryDTO> getVeterinaryId(@PathVariable("id")int id){
+        log.info("The GET method was called for the method: getVeterinaryId");
+        VeterinaryDTO veterinaryDTO = convertToVeterinaryDTO( veterinaryServise.findoneVeterinary(id));
+        exceptionMethods.validationId(veterinaryDTO,id);
+        return ResponseEntity.ok(veterinaryDTO);
     }
 
     @GetMapping
     public List<Veterinary> getAllVeterinary(){
-        System.out.println("getALL Method getVeterinary");
+        log.info("The GET method was called for the method: getAllVeterinary");
         return veterinaryServise.findAllVeterinary();
     }
 
     @PutMapping("/{id}")
-    public void updateVeterinary(@RequestBody @Valid Veterinary veterinary,BindingResult bindingResult ,@PathVariable("id")int id){
-        System.out.println("put Method updateVeterinary");
+    public ResponseEntity<Veterinary> updateVeterinary(@RequestBody @Valid VeterinaryDTO veterinaryDTO,BindingResult bindingResult ,@PathVariable("id")int id){
+        log.info("The PUT method was called for the method: updateVeterinary");
         exceptionMethods.existByID(id);
         exceptionMethods.validationModelField(bindingResult);
-        veterinaryServise.updateVeterinary( id, veterinary);
-
+        return ResponseEntity.ok( veterinaryServise.updateVeterinary(  convertToVeterinary(veterinaryDTO), id));
     }
 
     @DeleteMapping("/{id}")
     public void deleteVeterinary(@PathVariable("id")int id){
         exceptionMethods.existByID(id);
         veterinaryServise.deleteVeterinary(id);
-        System.out.println("delete Method deleteVeterinary");
-
-
+        log.info("The DELETE method was called for the method: deleteVeterinary");
     }
 
+    private Veterinary convertToVeterinary(VeterinaryDTO veterinaryDTO){
+        log.info("convertToVeterinary Return");
+        return modelMapper.map(veterinaryDTO,Veterinary.class);
+    }
+
+    private VeterinaryDTO convertToVeterinaryDTO(Veterinary veterinary){
+        log.info("convertToVeterinaryDTO Return");
+        return modelMapper.map(veterinary,VeterinaryDTO.class);
+    }
 
 
 }

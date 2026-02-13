@@ -1,10 +1,15 @@
 package ru.controllers;
 
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.DTO.VeterinaryReceptionDTO;
 import ru.models.VeterinaryReception;
 import ru.servises.VeterinaryReceptionServise;
-import ru.util.ExceptionMethods;
+import ru.util.Excepion.ExceptionMethods;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -14,46 +19,64 @@ import java.util.List;
 public class VeterinaryReceptionControllers {
 
 
+    private static final Logger log = LoggerFactory.getLogger(VeterinaryReceptionControllers.class);
+    private final VeterinaryReceptionServise veterinaryReceptionServise;
+    private final ExceptionMethods exceptionMethods;
+    private final ModelMapper modelMapper;
 
-    private VeterinaryReceptionServise veterinaryReceptionServise;
-    private ExceptionMethods exceptionMethods;
-
-    public VeterinaryReceptionControllers(VeterinaryReceptionServise veterinaryReceptionServise, ExceptionMethods exceptionMethods) {
+    public VeterinaryReceptionControllers(VeterinaryReceptionServise veterinaryReceptionServise, ExceptionMethods exceptionMethods, ModelMapper modelMapper) {
         this.veterinaryReceptionServise = veterinaryReceptionServise;
         this.exceptionMethods = exceptionMethods;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping
-    public VeterinaryReception createVeterinaryReception(@RequestBody @Valid VeterinaryReception veterinaryReception, BindingResult bindingResult){
-
+    public ResponseEntity <VeterinaryReception> createVeterinaryReception(@RequestBody @Valid VeterinaryReceptionDTO veterinaryReceptionDTO, BindingResult bindingResult){
+        log.info("The POST method was called for the method: createVeterinaryReception");
         exceptionMethods.validationModelField(bindingResult);
-        return veterinaryReceptionServise.createVeterinaryReception(veterinaryReception);
+        return ResponseEntity.ok( veterinaryReceptionServise.
+                createVeterinaryReception(convertToVeterinaryReception(veterinaryReceptionDTO)));
     }
 
     @GetMapping("/{id}")
-    public VeterinaryReception getVeterinaryReceptionForId(@PathVariable("id") int id){
-
-         VeterinaryReception reception= veterinaryReceptionServise.getVeterinaryReceptionForId(id);
-         exceptionMethods.validationId(reception, id);
-        return reception;
+    public ResponseEntity <VeterinaryReceptionDTO> getVeterinaryReceptionForId(@PathVariable("id") int id){
+        log.info("The GET method was called for the method:getVeterinaryReceptionForId");
+         VeterinaryReceptionDTO receptionDTO= convertToVeterinaryReceptionDTO( veterinaryReceptionServise.getVeterinaryReceptionForId(id));
+         exceptionMethods.validationId(receptionDTO, id);
+        return ResponseEntity.ok(receptionDTO);
     }
 
     @GetMapping
     public List<VeterinaryReception> getAllVeterenaryReception(){
+        log.info("The GET method was called for the method:getAllVeterenaryReception");
         return veterinaryReceptionServise.getAllVeterenaryReception();
     }
 
     @PutMapping("/{id}")
-    public void updateVeterenaryReception(@RequestBody @Valid VeterinaryReception veterinaryReception,BindingResult bindingResult , @PathVariable("id") int id){
+    public ResponseEntity <VeterinaryReception> updateVeterenaryReception(@RequestBody @Valid VeterinaryReceptionDTO veterinaryReceptionDTO
+            ,BindingResult bindingResult , @PathVariable("id") int id){
+        log.info("The PUT method was called for the method: updateVeterenaryReception");
         exceptionMethods.existByID(id);
         exceptionMethods.validationModelField(bindingResult);
-        veterinaryReceptionServise.updateVeterenaryReception(veterinaryReception, id);
+       return ResponseEntity.ok( veterinaryReceptionServise.updateVeterenaryReception(convertToVeterinaryReception(veterinaryReceptionDTO), id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteVeterenaryReception(@PathVariable("id") int id){
+    public int deleteVeterenaryReception(@PathVariable("id") int id){
+        log.info("The DELETE method was called for the method: deleteVeterenaryReception");
         exceptionMethods.existByID(id);
         veterinaryReceptionServise.deleteVeterenaryReception(id);
+        return id;
+    }
+
+    private VeterinaryReception convertToVeterinaryReception(VeterinaryReceptionDTO veterinaryReceptionDTO){
+        log.info("Return convertToVeterinaryReception");
+        return modelMapper.map(veterinaryReceptionDTO, VeterinaryReception.class);
+    }
+
+    private  VeterinaryReceptionDTO convertToVeterinaryReceptionDTO(VeterinaryReception veterinaryReception){
+        log.info("Return convertToVeterinaryReceptionDTO");
+        return modelMapper.map(veterinaryReception,VeterinaryReceptionDTO.class);
     }
 
 

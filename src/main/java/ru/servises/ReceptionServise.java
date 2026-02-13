@@ -3,6 +3,7 @@ package ru.servises;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.DTO.ToNotificationPostDTO;
 import ru.models.Reception;
 import ru.repositories.ReceptionRepository;
 
@@ -44,5 +45,9 @@ public class ReceptionServise {
     public void receptionServise(int id) {
         receptionRepository.deleteById(id);
 
+    }
+
+    public ToNotificationPostDTO postNotification(ToNotificationPostDTO toNotificationPostDTO) {
+        return null;
     }
 }

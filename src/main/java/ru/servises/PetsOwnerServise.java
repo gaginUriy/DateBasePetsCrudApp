@@ -38,7 +38,7 @@ public class PetsOwnerServise {
     }
 
     @Transactional
-    public OwnerPets updatePetsOwner(int id, OwnerPets ownerPets) {
+    public OwnerPets updatePetsOwner( OwnerPets ownerPets ,int id) {
         ownerPets.setPetsId(id);
         return petsOwnerRepository.save(ownerPets);
     }

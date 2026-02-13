@@ -1,58 +1,32 @@
-package ru.models;
+package ru.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-
-@Entity
-@Table(name = "veterinary_reception")
-
-public class VeterinaryReception {
-
-
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class VeterinaryReceptionDTO {
 
     @NotNull(message = " не может быть пустым")
-    @Column(name = "veterinary_id")
+
     private int veterinaryId;
 
     @NotNull(message = " не может быть пустым")
-    @Column(name = "start_of_reception")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+
+    @NotNull(message = " не может быть пустым")
     private Date startOfReception;
 
-    @Column(name = "end_of_reception")
+
     @NotNull(message = " не может быть пустым")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date endOfReception;
 
-    @Column(name = "reason_for_request")
+
     private String reasonForRequest;
 
-    public VeterinaryReception(){}
-
-    public VeterinaryReception(int id, int veterinaryId, Date startOfReception, Date endOfReception, String reasonForTheRequest) {
-        this.id = id;
-        this.veterinaryId = veterinaryId;
-        this.startOfReception = startOfReception;
-        this.endOfReception = endOfReception;
-        this.reasonForRequest = reasonForTheRequest;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getVeterinaryId() {
         return veterinaryId;

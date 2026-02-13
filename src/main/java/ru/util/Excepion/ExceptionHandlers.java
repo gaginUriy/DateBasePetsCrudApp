@@ -1,5 +1,7 @@
-package ru.util;
+package ru.util.Excepion;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,12 +10,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlers {
 
-   @ExceptionHandler
+    private static final Logger log = LoggerFactory.getLogger(ExceptionHandlers.class);
+
+    @ExceptionHandler
     public ResponseEntity<ClassForExcepted> handlerExeption(NotIdException e)
     {
         ClassForExcepted response = new ClassForExcepted(e.getMessage());
         response.setMessage(e.getMessage());
-        System.out.println("NotIdException exist");
+        log.warn("NotIdException exist");
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
@@ -21,7 +25,7 @@ public class ExceptionHandlers {
 
     @ExceptionHandler()
     public ResponseEntity<ClassForExcepted> handlerExeption(NoValidPeremetrExeption e) {
-        System.out.println("NoValidPeremetrExeption exist");
+        log.warn("NoValidPeremetrExeption exist");
         ClassForExcepted response = new ClassForExcepted(e.getMessage().toString());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
@@ -33,7 +37,7 @@ public class ExceptionHandlers {
     {
         ClassForExcepted response = new ClassForExcepted(e.getMessage());
         response.setMessage("Нейизвестная ошибка");
-        System.out.println("Exception exist");
+        log.warn("Exception exist");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

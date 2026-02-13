@@ -1,4 +1,4 @@
-package ru.util;
+package ru.util.Excepion;
 
 public class ClassForExcepted {
     private String message;
