@@ -17,7 +17,7 @@ public class ReceptionServise {
 
     private final ReceptionRepository receptionRepository;
 
-    public ReceptionServise( ReceptionRepository receptionRepository) {
+    public ReceptionServise(ReceptionRepository receptionRepository) {
         this.receptionRepository = receptionRepository;
     }
 
@@ -45,5 +45,9 @@ public class ReceptionServise {
     public void receptionServise(int id) {
         receptionRepository.deleteById(id);
 
+    }
+
+    public ToNotificationPostDTO postNotification(ToNotificationPostDTO toNotificationPostDTO) {
+        return null;
     }
 }

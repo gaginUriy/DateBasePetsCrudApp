@@ -6,6 +6,4 @@ import ru.models.Pets;
 
 @Repository
 public interface PetRepository extends JpaRepository<Pets, Integer> {
-
-
 }
