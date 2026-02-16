@@ -1,9 +1,11 @@
 package ru.servises;
 
 
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.DTO.ToNotificationPostDTO;
+import org.springframework.web.client.RestTemplate;
+import ru.DTO.IntegrationReceptionDTO;
 import ru.models.Reception;
 import ru.repositories.ReceptionRepository;
 
@@ -15,9 +17,11 @@ import java.util.Optional;
 
 public class ReceptionServise {
 
+    private final RestTemplate restTemplate;
     private final ReceptionRepository receptionRepository;
 
-    public ReceptionServise( ReceptionRepository receptionRepository) {
+    public ReceptionServise(RestTemplate restTemplate, ReceptionRepository receptionRepository) {
+        this.restTemplate = restTemplate;
         this.receptionRepository = receptionRepository;
     }
 
@@ -45,5 +49,9 @@ public class ReceptionServise {
     public void receptionServise(int id) {
         receptionRepository.deleteById(id);
 
+    }
+
+    public String postNotification(int id){
+        return  restTemplate.postForObject("https://postman-echo.com/post",new HttpEntity<>(receptionRepository.findIntegrationReception(id).stream().findAny().orElse(null)),String.class);
     }
 }

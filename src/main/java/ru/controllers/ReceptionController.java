@@ -3,9 +3,12 @@ package ru.controllers;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import ru.DTO.IntegrationReceptionDTO;
 import ru.DTO.ReceptionDTO;
 import ru.models.Reception;
 
@@ -20,11 +23,12 @@ import java.util.List;
 public class ReceptionController {
 
     private static final Logger log = LoggerFactory.getLogger(ReceptionController.class);
+
     private final ReceptionServise receptionServise;
     private final ExceptionMethods exceptionMethods;
     private final ModelMapper modelMapper;
 
-    public ReceptionController(ReceptionServise receptionServise, ExceptionMethods exceptionMethods, ModelMapper modelMapper) {
+    public ReceptionController( ReceptionServise receptionServise, ExceptionMethods exceptionMethods, ModelMapper modelMapper) {
         this.receptionServise = receptionServise;
         this.exceptionMethods = exceptionMethods;
         this.modelMapper = modelMapper;
@@ -68,6 +72,12 @@ public class ReceptionController {
         log.info("The DELETE  method was called for the method:GetPets");
         exceptionMethods.existByID(id);
         receptionServise.receptionServise(id);
+    }
+
+
+    @PutMapping("/Aprove/{id}")
+    public String integration(@PathVariable("id")int id){
+      return   receptionServise.postNotification(id);
     }
 
 
