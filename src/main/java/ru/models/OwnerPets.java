@@ -47,6 +47,10 @@ public class OwnerPets {
     @Email(message = " значение не корректно")
     private String email;
 
+//    @ManyToOne
+//    @JoinColumn(name = "pets_id",referencedColumnName = "id")
+//    private OwnerPets owner;
+
     public OwnerPets() {}
 
     public OwnerPets( String firstName, String lastName, String phone, int petsId, LocalDate birthDay, String telegram, String email) {
@@ -123,4 +127,12 @@ public class OwnerPets {
     public void setEmail(String email) {
         this.email = email;
     }
+
+//    public OwnerPets getOwner() {
+//        return owner;
+//    }
+//
+//    public void setOwner(OwnerPets owner) {
+//        this.owner = owner;
+//    }
 }

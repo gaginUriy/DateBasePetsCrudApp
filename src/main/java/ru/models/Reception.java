@@ -17,7 +17,6 @@ public class Reception {
 
     @Column(name = "veterinary_reception_id")
     @NotNull(message = " не может быть пустым")
-    @Positive
     private int veterinaryReceptionId;
 
     @Column(name = "pets_owner_id")

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Entity
@@ -36,6 +37,9 @@ public class Pets {
     @Enumerated(EnumType.STRING)
     @Column(name = "color")
     private PetsColor color;
+
+//    @OneToMany(mappedBy = "Owner")
+//    private List<OwnerPets> ownerPetsList;
 
 
 
@@ -98,6 +102,11 @@ public class Pets {
         this.color = color;
     }
 
-
-
+//    public List<OwnerPets> getOwnerPetsList() {
+//        return ownerPetsList;
+//    }
+//
+//    public void setOwnerPetsList(List<OwnerPets> ownerPetsList) {
+//        this.ownerPetsList = ownerPetsList;
+//    }
 }
