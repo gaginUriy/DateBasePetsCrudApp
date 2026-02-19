@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Pets")
+@RequestMapping("/pets")
 public class PetControllers {
     //<editor-fold desc="конструктор">
 
