@@ -19,6 +19,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -35,21 +36,21 @@ public class ConfigurationSpring implements WebMvcConfigurer {
 private final Environment env;
 
 @Autowired
-    public ConfigurationSpring(Environment env) {
-        this.env = env;
+        public ConfigurationSpring(Environment env) {
+            this.env = env;
 
-    }
-    @Bean
-    public LocalValidatorFactoryBean validator() {
-        return new LocalValidatorFactoryBean();
-    }
+        }
+        @Bean
+        public LocalValidatorFactoryBean validator() {
+            return new LocalValidatorFactoryBean();
+        }
 
-    @Bean
-    public MethodValidationPostProcessor methodValidationPostProcessor() {
-        return new MethodValidationPostProcessor();
-    }
-    @Bean
-    public DataSource dataSource(){
+        @Bean
+        public MethodValidationPostProcessor methodValidationPostProcessor() {
+            return new MethodValidationPostProcessor();
+        }
+        @Bean
+         public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
         dataSource.setDriverClassName(env.getRequiredProperty("hibernate.driver_class"));
@@ -57,12 +58,11 @@ private final Environment env;
         dataSource.setUsername(env.getRequiredProperty("hibernate.connection.username"));
         dataSource.setPassword(env.getRequiredProperty("hibernate.connection.password"));
         return dataSource;
-    }
+         }
 
-    @Bean
-    public JdbcTemplate jdbcTemplate(){
+          @Bean public JdbcTemplate jdbcTemplate(){
         return new JdbcTemplate(dataSource());
-    }
+        }
         private Properties hibernateProperties() {
             Properties properties = new Properties();
             properties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
@@ -71,8 +71,8 @@ private final Environment env;
             return properties;
         }
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+       @Bean
+       public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
         em.setPackagesToScan("ru.models");
@@ -82,7 +82,7 @@ private final Environment env;
         em.setJpaProperties(hibernateProperties());
 
         return em;
-    }
+         }
 
         @Bean
         public PlatformTransactionManager transactionManager() {
@@ -94,10 +94,16 @@ private final Environment env;
         }
 
         @Bean
-    public ModelMapper modelMapper(){
+         public ModelMapper modelMapper(){
         return new ModelMapper();
-
         }
+
+        @Bean
+        public RestTemplate restTemplate(){
+         return new RestTemplate();
+        }
+
+
 
 
 }

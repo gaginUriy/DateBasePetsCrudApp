@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.DTO.PetsDTO;
 import ru.DTO.ReceptionDTO;
-import ru.DTO.ToNotificationPostDTO;
-import ru.models.Pets;
 import ru.models.Reception;
 
 import ru.servises.ReceptionServise;
@@ -73,11 +70,9 @@ public class ReceptionController {
         receptionServise.receptionServise(id);
     }
 
-    @PostMapping("{/notification}")
-    public ResponseEntity<ToNotificationPostDTO> confirmVetAppointmentBooked(@RequestBody @Valid ToNotificationPostDTO toNotificationPostDTO, BindingResult bindingResult){
-        log.info("The POST method was called for the method:GetPets");
-        exceptionMethods.validationModelField(bindingResult);
-       return ResponseEntity.ok  (receptionServise.postNotification(toNotificationPostDTO));
+    @PutMapping("/Aprove/{id}")
+    public String integration(@PathVariable("id")int id){
+        return   receptionServise.postNotification(id);
     }
 
 
